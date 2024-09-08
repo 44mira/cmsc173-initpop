@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from random import random
 import numpy as np
 
+_ = Axes3D  # get rid of unused import warning (it is dynamically used)
 
 population_size = 2000
 
