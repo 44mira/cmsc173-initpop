@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import axes3d
+from mpl_toolkits.mplot3d import Axes3D
 from random import random
 import numpy as np
 
-population_size = 1000
 
-lb_x, ub_x = -5.0, 5.0
-lb_y, ub_y = -10.0, 10.0
+population_size = 2000
+
+x_bounds = -5.0, 5.0
+y_bounds = -10.0, 10.0
 
 
 def f(x, y):
@@ -16,3 +17,24 @@ def f(x, y):
 
 def generate_value(lb, ub):
     return lb + (ub - lb) * random()
+
+
+# create a countour3d map with equally spaced x and y values
+# for comparison
+
+x = np.linspace(*x_bounds, 150)
+y = np.linspace(*y_bounds, 150)
+
+X, Y = np.meshgrid(x, y)
+Z = f(X, Y)
+
+fig = plt.figure()
+ax2 = plt.axes(projection="3d")
+ax2.contour3D(X, Y, Z, 80, cmap="hot")
+
+
+ax2.set_xlabel("x")
+ax2.set_ylabel("y")
+ax2.set_zlabel("f")
+
+plt.show()
