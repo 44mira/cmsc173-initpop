@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from random import random
 import numpy as np
+from math import sin, cos, pi
 
 from sys import argv
 
@@ -13,13 +14,14 @@ if len(argv) > 1:
     population_size = int(argv[1])
 
 
-x_bounds = -5.0, 5.0
-y_bounds = -10.0, 10.0
+x_bounds = -100.0, 1e20
+y_bounds = -1e20, 100.0
 
 
 def f(x, y):
-    # factor out coefficients
-    return sum(((a**4 - 16 * a**2 + 5 * a) / 2) for a in (x, y))
+    return (
+        0.5 + (cos(sin(abs(x**2 - y**2))) ** 2 - 0.5) / (1 + 0.001 * (x**2 + y**2)) ** 2
+    )
 
 
 def generate_value(lb, ub, rand):
@@ -52,38 +54,8 @@ def display_scatter(xline, yline, zline):
     plt.show()  # show scatterplot
 
 
-# create a countour3d map with equally spaced x and y values
-# for comparison
-
-x = np.linspace(*x_bounds, 150)
-y = np.linspace(*y_bounds, 150)
-
-X, Y = np.meshgrid(x, y)
-Z = f(X, Y)
-
-fig = plt.figure()
-ax2 = plt.axes(projection="3d")
-ax2.contour3D(X, Y, Z, 80, cmap="hot")
-
-
-ax2.set_xlabel("x")
-ax2.set_ylabel("y")
-ax2.set_zlabel("f")
-
-plt.show()  # show the figure
-
-# ---
-
-lines = generate_lines((random(), random()) for _ in range(population_size))
-display_scatter(*lines)
-
-# ---
-
-
 # We make the chaotic map a generator
-def logistic_chaotic_map(initial):
-    update = lambda a: 4 * a * (1 - a)
-
+def chaotic_map(initial, update):
     yield initial
     current = update(initial)
 
@@ -92,9 +64,30 @@ def logistic_chaotic_map(initial):
         current = update(current)
 
 
+# ---
+
+x = np.linspace(*x_bounds, 150)
+y = np.linspace(*y_bounds, 150)
+
+fig = plt.figure()
+
+# --- Logistic
+
+logistic = lambda a: 4 * a * (1 - a)
+
 # We initialize the sequences
-logis_x = logistic_chaotic_map(0.30)
-logis_y = logistic_chaotic_map(0.80)
+logis_x = chaotic_map(0.30, logistic)
+logis_y = chaotic_map(0.80, logistic)
 
 lines = generate_lines(zip(logis_x, logis_y))
+display_scatter(*lines)
+
+# --- Sinusoidal
+
+sinusoidal = lambda a: sin(a * pi)
+
+sinus_x = chaotic_map(0.30, sinusoidal)
+sinus_y = chaotic_map(0.80, sinusoidal)
+
+lines = generate_lines(zip(sinus_x, sinus_y))
 display_scatter(*lines)
