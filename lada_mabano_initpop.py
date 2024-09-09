@@ -74,21 +74,27 @@ plt.show()  # show the figure
 
 # ---
 
-xline, yline, zline = [], [], []
+lines = generate_lines((random(), random()) for _ in range(population_size))
+display_scatter(*lines)
 
-for i in range(population_size):
-    xline.append(generate_value(*x_bounds, random()))
-    yline.append(generate_value(*y_bounds, random()))
+# ---
 
-    zline.append(f(xline[i], yline[i]))
 
-xline, yline, zline = map(np.array, (xline, yline, zline))
+# We make the chaotic map a generator
+def logistic_chaotic_map(initial):
+    update = lambda a: 4 * a * (1 - a)
 
-ax1 = plt.axes(projection="3d")
-ax1.scatter3D(xline, yline, zline, c=zline, cmap="hot", s=7)
+    yield initial
+    current = update(initial)
 
-ax1.set_xlabel("x")
-ax1.set_ylabel("y")
-ax1.set_zlabel("z")
+    for _ in range(population_size - 1):
+        yield current
+        current = update(current)
 
-plt.show()  # show scatterplot
+
+# We initialize the sequences
+logis_x = logistic_chaotic_map(0.30)
+logis_y = logistic_chaotic_map(0.80)
+
+lines = generate_lines(zip(logis_x, logis_y))
+display_scatter(*lines)
