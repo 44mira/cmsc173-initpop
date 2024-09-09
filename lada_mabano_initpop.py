@@ -3,9 +3,15 @@ from mpl_toolkits.mplot3d import Axes3D
 from random import random
 import numpy as np
 
+from sys import argv
+
 _ = Axes3D  # get rid of unused import warning (it is dynamically used)
 
-population_size = 2000
+# use command line argument for population size
+population_size = 1000
+if len(argv) > 1:
+    population_size = int(argv[1])
+
 
 x_bounds = -5.0, 5.0
 y_bounds = -10.0, 10.0
