@@ -38,4 +38,4 @@ ax2.set_xlabel("x")
 ax2.set_ylabel("y")
 ax2.set_zlabel("f")
 
-plt.show()
+plt.show()  # show the figure
