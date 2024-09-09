@@ -26,6 +26,32 @@ def generate_value(lb, ub, rand):
     return lb + (ub - lb) * rand
 
 
+def generate_lines(rands):
+    xline, yline, zline = [], [], []
+
+    for rand_x, rand_y in rands:
+        curr_x = generate_value(*x_bounds, rand_x)
+        curr_y = generate_value(*y_bounds, rand_y)
+
+        xline.append(curr_x)
+        yline.append(curr_y)
+
+        zline.append(f(curr_x, curr_y))
+
+    return map(np.array, (xline, yline, zline))
+
+
+def display_scatter(xline, yline, zline):
+    ax1 = plt.axes(projection="3d")
+    ax1.scatter3D(xline, yline, zline, c=zline, cmap="hot", s=7)
+
+    ax1.set_xlabel("x")
+    ax1.set_ylabel("y")
+    ax1.set_zlabel("z")
+
+    plt.show()  # show scatterplot
+
+
 # create a countour3d map with equally spaced x and y values
 # for comparison
 
