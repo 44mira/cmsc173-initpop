@@ -22,8 +22,8 @@ def f(x, y):
     return sum(((a**4 - 16 * a**2 + 5 * a) / 2) for a in (x, y))
 
 
-def generate_value(lb, ub):
-    return lb + (ub - lb) * random()
+def generate_value(lb, ub, rand):
+    return lb + (ub - lb) * rand
 
 
 # create a countour3d map with equally spaced x and y values
@@ -51,8 +51,8 @@ plt.show()  # show the figure
 xline, yline, zline = [], [], []
 
 for i in range(population_size):
-    xline.append(generate_value(*x_bounds))
-    yline.append(generate_value(*y_bounds))
+    xline.append(generate_value(*x_bounds, random()))
+    yline.append(generate_value(*y_bounds, random()))
 
     zline.append(f(xline[i], yline[i]))
 
