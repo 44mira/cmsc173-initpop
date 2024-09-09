@@ -39,3 +39,24 @@ ax2.set_ylabel("y")
 ax2.set_zlabel("f")
 
 plt.show()  # show the figure
+
+# ---
+
+xline, yline, zline = [], [], []
+
+for i in range(population_size):
+    xline.append(generate_value(*x_bounds))
+    yline.append(generate_value(*y_bounds))
+
+    zline.append(f(xline[i], yline[i]))
+
+xline, yline, zline = map(np.array, (xline, yline, zline))
+
+ax1 = plt.axes(projection="3d")
+ax1.scatter3D(xline, yline, zline, c=zline, cmap="hot", s=7)
+
+ax1.set_xlabel("x")
+ax1.set_ylabel("y")
+ax1.set_zlabel("z")
+
+plt.show()  # show scatterplot
